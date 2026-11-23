@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-  <link rel="stylesheet" href="css/styles.css?v=20261123a">
+  <link rel="stylesheet" href="css/styles.css?v=20261123d">
 </head>
 <body id="top" data-page="home">
   <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
@@ -23,7 +23,7 @@
     <div class="wrap">
       <a class="brand" href="index.html">
         <img src="favicon.svg" alt="" width="22" height="22">
-        <span>Miguel Lopez</span>
+        <span translate="no">Miguel Lopez</span>
       </a>
       <nav class="site-nav" aria-label="Main" data-i18n-attr="aria-label:nav.label">
         <ul class="nav-list">
@@ -39,42 +39,68 @@
 
   <main id="main" class="page wrap">
     <section class="hero">
-      <h1 class="hero-title" data-i18n="home.10">Drilling and well intervention</h1>
-      <p class="lede" data-i18n="home.11">I am a senior petroleum engineer with more than 37 years in oil and gas across Latin America. I consult on drilling, fishing and remedial operations, on tenders and contracts, and on operational performance.</p>
-      <p class="hero-note" data-i18n="home.12">Based in Bogotá, Colombia. Consulting for oil and gas companies across Latin America.</p>
+      <h1 class="hero-title" data-i18n="home.20">Drilling and well intervention</h1>
+      <p class="lede" data-i18n="home.21">I am a senior petroleum engineer with more than 37 years in oil and gas across Latin America. I consult on drilling, fishing and remedial operations, on tenders and contracts, and on operational performance.</p>
+      <p class="hero-note" data-i18n="home.22">Based in Bogotá, Colombia. Consulting for oil and gas companies across Latin America.</p>
     </section>
 
-    <figure class="strip-wrap">
+    <div class="cover"><img src="assets/scenes/gold.svg" alt="" width="2500" height="667"></div>
+
+    <div class="rows">
+      <section class="row row--art" aria-labelledby="row-services">
+        <div class="row-main">
+          <h2 class="row-title" data-i18n="home.7" id="row-services">How I can help</h2>
+          <p class="row-text" data-i18n="home.8">Drilling optimization, remedial operations, tenders and contracts, and team development.</p>
+          <ul class="tiles tiles--3">
+          <li class="tile" style="--t: #ffe9dc"><img src="assets/icons/derrick.svg" alt="" width="40" height="40"><span data-i18n="home.1">Drilling and remedial</span></li>
+          <li class="tile" style="--t: #def2ef"><img src="assets/icons/gauge.svg" alt="" width="40" height="40"><span data-i18n="home.2">Drilling optimization</span></li>
+          <li class="tile" style="--t: #e0e7fe"><img src="assets/icons/contract.svg" alt="" width="40" height="40"><span data-i18n="home.3">Tenders and contracts</span></li>
+          <li class="tile" style="--t: #f9e2ea"><img src="assets/icons/magnifier.svg" alt="" width="40" height="40"><span data-i18n="home.4">Assessments</span></li>
+          <li class="tile" style="--t: #e2f1e5"><img src="assets/icons/trend.svg" alt="" width="40" height="40"><span data-i18n="home.5">Profitability</span></li>
+          <li class="tile" style="--t: #fdefdb"><img src="assets/icons/sprout.svg" alt="" width="40" height="40"><span data-i18n="home.6">Teams and talent</span></li>
+        </ul>
+          <p class="row-foot"><a class="btn" href="services.html" data-i18n="home.9">See the services</a></p>
+        </div>
+        <div class="row-art"><img src="assets/scenes/midday-card.svg" alt="" width="800" height="600"></div>
+      </section>
+
+      <section class="row row--art" aria-labelledby="row-experience">
+        <div class="row-main">
+          <h2 class="row-title" data-i18n="home.10" id="row-experience">More than 37 years</h2>
+          <p class="row-text" data-i18n-html="home.11">From reservoir engineer at <span translate="no">PDVSA</span> to country and regional manager at <span translate="no">Baker Hughes</span>, <span translate="no">Smith International</span>, <span translate="no">Schlumberger</span> and <span translate="no">Nabors</span>.</p>
+          <figure class="strip-wrap">
       <div class="strip" role="img" aria-label="Career timeline from 1987 to today: PDVSA, Baker Hughes, Smith International, Schlumberger, independent work, Nabors, Wellbore Integrity Solutions and Roku Tech." data-i18n-attr="aria-label:home.strip.label">
-        <span class="c2" style="--w: 10"><b>PDVSA</b></span>
-        <span class="c1" style="--w: 7"><b>Baker Hughes</b></span>
-        <span class="c2" style="--w: 5"><b>Smith</b></span>
-        <span class="c1" style="--w: 6"><b>Schlumberger</b></span>
+        <span class="c2" style="--w: 10"><b translate="no">PDVSA</b></span>
+        <span class="c1" style="--w: 7"><b translate="no">Baker Hughes</b></span>
+        <span class="c2" style="--w: 5"><b translate="no">Smith</b></span>
+        <span class="c1" style="--w: 6"><b translate="no">Schlumberger</b></span>
         <span class="c2" style="--w: 1"></span>
-        <span class="c1" style="--w: 4"><b>Nabors</b></span>
+        <span class="c1" style="--w: 4"><b translate="no">Nabors</b></span>
         <span class="c2" style="--w: 1"></span>
         <span class="c1" style="--w: 2"></span>
       </div>
       <p class="strip-axis" aria-hidden="true"><span>1987</span><span data-i18n="strip.now">Today</span></p>
     </figure>
+          <p class="row-foot"><a class="btn" href="experience.html" data-i18n="home.12">See the career log</a></p>
+        </div>
+        <div class="row-art row-art--map"><img src="assets/about/americas-map.svg" alt="" width="760" height="860"></div>
+      </section>
 
-    <section class="cards" aria-label="Where to start" data-i18n-attr="aria-label:home.cards">
-        <article class="card">
-          <h2 class="card-title" data-i18n="home.1">How I can help</h2>
-          <p data-i18n="home.2">Drilling optimization, remedial operations, tenders and contracts, and team development.</p>
-          <p class="card-foot"><a class="btn" href="services.html" data-i18n="home.3">See the services</a></p>
-        </article>
-        <article class="card">
-          <h2 class="card-title" data-i18n="home.4">More than 37 years</h2>
-          <p data-i18n="home.5">From reservoir engineer at PDVSA to country and regional manager at Baker Hughes, Smith International, Schlumberger and Nabors.</p>
-          <p class="card-foot"><a class="btn" href="experience.html" data-i18n="home.6">See the career log</a></p>
-        </article>
-        <article class="card">
-          <h2 class="card-title" data-i18n="home.7">About me</h2>
-          <p data-i18n="home.8">My degree in petroleum engineering, the languages I work in and how I run teams and projects.</p>
-          <p class="card-foot"><a class="btn" href="about.html" data-i18n="home.9">Read more about me</a></p>
-        </article>
-    </section>
+      <section class="row row--art" aria-labelledby="row-about">
+        <div class="row-main">
+          <h2 class="row-title" data-i18n="home.17" id="row-about">About me</h2>
+          <p class="row-text" data-i18n="home.18">My degree in petroleum engineering, how I came to the industry and how I run teams and projects.</p>
+          <ul class="tiles">
+          <li class="tile" style="--t: #e0e7fe"><img src="assets/icons/cap.svg" alt="" width="40" height="40"><span data-i18n-html="home.13"><span translate="no">Universidad del Zulia</span></span></li>
+          <li class="tile" style="--t: #def2ef"><img src="assets/icons/speech.svg" alt="" width="40" height="40"><span data-i18n="home.14">Three languages</span></li>
+          <li class="tile" style="--t: #fdefdb"><img src="assets/icons/clock.svg" alt="" width="40" height="40"><span data-i18n="home.15">Since 1987</span></li>
+          <li class="tile" style="--t: #ffe9dc"><img src="assets/icons/pin.svg" alt="" width="40" height="40"><span data-i18n="home.16">Bogotá, Colombia</span></li>
+        </ul>
+          <p class="row-foot"><a class="btn" href="about.html" data-i18n="home.19">Read more about me</a></p>
+        </div>
+        <div class="row-art"><img src="assets/scenes/dusk-card.svg" alt="" width="800" height="600"></div>
+      </section>
+    </div>
 
     <section class="closing" aria-labelledby="closing-title">
       <h2 class="closing-title" data-i18n="closing.title" id="closing-title">Have a well, a tender or a contract to talk about?</h2>
@@ -84,7 +110,7 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>&copy; <span data-year>2026</span> Miguel Lopez</p>
+      <p>&copy; <span data-year>2026</span> <span translate="no">Miguel Lopez</span></p>
       <ul class="footer-links">
         <li><a href="contact.html" data-i18n="foot.contact">Contact</a></li>
       </ul>
@@ -92,7 +118,7 @@
     </div>
   </footer>
 
-  <script src="js/i18n.js?v=20261123a"></script>
-  <script src="js/site.js?v=20261123a"></script>
+  <script src="js/i18n.js?v=20261123d"></script>
+  <script src="js/site.js?v=20261123d"></script>
 </body>
 </html>

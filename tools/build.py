@@ -14,9 +14,14 @@ changed. Do not edit the .html files by hand, the next build would overwrite the
 import html
 import json
 import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from art import ICONS   # tile colours live next to the drawings
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "20261123a"      # change it whenever css/styles.css or a .js file changes
+VERSION = "20261123d"      # change it whenever css/styles.css or a .js file changes
 YEAR = "2026"
 NAME = "Miguel Lopez"
 ES = {}                    # key -> Spanish text, written to js/i18n.js
@@ -39,13 +44,32 @@ def _key(key):
     return "%s.%d" % (PAGE, _n[PAGE])
 
 
+# Names of companies, schools and people. They are never translated, so they are wrapped in
+# translate="no": a browser's own translator then leaves them alone too ("Baker Hughes" must not
+# become "Panadero Hughes").
+PROTECT = ["Wellbore Integrity Solutions", "Nabors Drilling International", "Nabors Drilling Solutions",
+           "Smith International", "Baker Hughes", "Schlumberger", "Roku Tech", "Nabors", "PDVSA", "Maraven",
+           "Smith", "Baker",
+           "Universidad del Zulia", "Miguel Enrique Lopez Gudiño", "Miguel Lopez"]
+_PROTECT_RE = re.compile("(%s)" % "|".join(re.escape(n) for n in PROTECT))
+
+
+def protect(h):
+    """h is HTML. Wraps every protected name in translate="no"."""
+    return _PROTECT_RE.sub(r'<span translate="no">\1</span>', h)
+
+
 def T(tag, en, es, cls=None, rich=False, key=None, extra=""):
     """An element with English text and a Spanish version. rich=True lets the text hold HTML."""
     k = _key(key)
-    ES[k] = es
+    body_en = en if rich else esc(en)
+    body_es = es if rich else esc(es)
+    p_en, p_es = protect(body_en), protect(body_es)
+    use_html = rich or p_en != body_en or p_es != body_es
+    ES[k] = p_es if use_html else es
     c = ' class="%s"' % cls if cls else ""
-    attr = "data-i18n-html" if rich else "data-i18n"
-    body = en if rich else esc(en)
+    attr = "data-i18n-html" if use_html else "data-i18n"
+    body = p_en if use_html else body_en
     x = (" " + extra) if extra else ""
     return '<%s%s %s="%s"%s>%s</%s>' % (tag, c, attr, k, x, body, tag)
 
@@ -84,7 +108,7 @@ def header(current, root=""):
     <div class="wrap">
       <a class="brand" href="%(root)sindex.html">
         <img src="%(root)sfavicon.svg" alt="" width="22" height="22">
-        <span>%(name)s</span>
+        <span translate="no">%(name)s</span>
       </a>
       <nav class="site-nav" aria-label="Main" data-i18n-attr="aria-label:nav.label">
         <ul class="nav-list">
@@ -103,7 +127,7 @@ def footer(root=""):
     ES["foot.contact"] = "Contacto"
     return """  <footer class="site-footer">
     <div class="wrap">
-      <p>&copy; <span data-year>%(year)s</span> %(name)s</p>
+      <p>&copy; <span data-year>%(year)s</span> <span translate="no">%(name)s</span></p>
       <ul class="footer-links">
         <li><a href="%(root)scontact.html" data-i18n="foot.contact">Contact</a></li>
       </ul>
@@ -113,14 +137,20 @@ def footer(root=""):
 """ % {"year": YEAR, "name": NAME, "root": root}
 
 
-def closing(root=""):
+def closing(root="", title=None, sub=None):
+    """The big question and button at the bottom of a page. title and sub are (English, Spanish) pairs."""
+    t = title or ("Have a well, a tender or a contract to talk about?",
+                  "¿Tiene un pozo, una licitación o un contrato del que hablar?")
+    key = (PAGE + ".closing.title") if title else "closing.title"
+    sub_html = ""
+    if sub:
+        sub_html = "\n      " + T("p", sub[0], sub[1], cls="closing-sub", key=PAGE + ".closing.sub")
     return """    <section class="closing" aria-labelledby="closing-title">
-      %s
+      %s%s
       <p class="closing-action">%s</p>
     </section>""" % (
-        T("h2", "Have a well, a tender or a contract to talk about?",
-          "¿Tiene un pozo, una licitación o un contrato del que hablar?",
-          cls="closing-title", extra='id="closing-title"', key="closing.title"),
+        T("h2", t[0], t[1], cls="closing-title", extra='id="closing-title"', key=key),
+        sub_html,
         '<a class="btn" href="%scontact.html" data-i18n="closing.btn">Send me a message</a>' % root,
     )
 
@@ -307,7 +337,7 @@ def strip(prefix):
                 "Schlumberger, trabajo independiente, Nabors, Wellbore Integrity Solutions y Roku Tech.")
     blocks = []
     for e in reversed(CAREER):
-        label = ('<b>%s</b>' % esc(e["short"])) if e["short"] else ""
+        label = ('<b translate="no">%s</b>' % esc(e["short"])) if e["short"] else ""
         blocks.append('<span class="c%d" style="--w: %d">%s</span>' % (e["c"], e["w"], label))
     ES["strip.now"] = "Hoy"
     return """<figure class="strip-wrap">
@@ -325,27 +355,54 @@ def strip(prefix):
 def page_home():
     global PAGE
     PAGE = "home"
-    cards = [
-        ("How I can help", "Cómo puedo ayudar",
-         "Drilling optimization, remedial operations, tenders and contracts, and team development.",
-         "Optimización de perforación, operaciones remediales, licitaciones y contratos, y desarrollo de equipos.",
-         "services.html", "See the services", "Ver los servicios"),
-        ("More than 37 years", "Más de 37 años",
-         "From reservoir engineer at PDVSA to country and regional manager at Baker Hughes, Smith International, Schlumberger and Nabors.",
-         "De ingeniero de yacimientos en PDVSA a gerente de país y regional en Baker Hughes, Smith International, Schlumberger y Nabors.",
-         "experience.html", "See the career log", "Ver la trayectoria"),
-        ("About me", "Sobre mí",
-         "My degree in petroleum engineering, the languages I work in and how I run teams and projects.",
-         "Mi título de ingeniero de petróleo, los idiomas en que trabajo y cómo dirijo equipos y proyectos.",
-         "about.html", "Read more about me", "Conocer más sobre mí"),
+
+    def tiles(items, cls=""):
+        out = []
+        for ic, en, es in items:
+            out.append('          <li class="tile" style="--t: %s">%s%s</li>' % (ICONS[ic][1], icon(ic), T("span", en, es)))
+        return '<ul class="tiles%s">\n%s\n        </ul>' % (cls, "\n".join(out))
+
+    def row(rid, title, text, body, href, btn, art, art_cls=""):
+        return """      <section class="row row--art" aria-labelledby="%s">
+        <div class="row-main">
+          %s
+          %s
+          %s
+          <p class="row-foot"><a class="btn" href="%s" data-i18n="%s">%s</a></p>
+        </div>
+        <div class="row-art%s">%s</div>
+      </section>""" % (rid,
+                       T("h2", title[0], title[1], cls="row-title", extra='id="%s"' % rid),
+                       T("p", text[0], text[1], cls="row-text"),
+                       body, href, _reg(btn[1]), esc(btn[0]), art_cls, art)
+
+    services = [("derrick", "Drilling and remedial", "Perforación y remediales"),
+                ("gauge", "Drilling optimization", "Optimización"),
+                ("contract", "Tenders and contracts", "Licitaciones y contratos"),
+                ("magnifier", "Assessments", "Evaluaciones"),
+                ("trend", "Profitability", "Rentabilidad"),
+                ("sprout", "Teams and talent", "Equipos y talento")]
+    about = [("cap", "Universidad del Zulia", "Universidad del Zulia"),
+             ("speech", "Three languages", "Tres idiomas"),
+             ("clock", "Since 1987", "Desde 1987"),
+             ("pin", "Bogotá, Colombia", "Bogotá, Colombia")]
+    rows = [
+        row("row-services", ("How I can help", "Cómo puedo ayudar"),
+            ("Drilling optimization, remedial operations, tenders and contracts, and team development.",
+             "Optimización de perforación, operaciones remediales, licitaciones y contratos, y desarrollo de equipos."),
+            tiles(services, " tiles--3"), "services.html", ("See the services", "Ver los servicios"),
+            pic("assets/scenes/midday-card.svg", None, 800, 600)),
+        row("row-experience", ("More than 37 years", "Más de 37 años"),
+            ("From reservoir engineer at PDVSA to country and regional manager at Baker Hughes, Smith International, Schlumberger and Nabors.",
+             "De ingeniero de yacimientos en PDVSA a gerente de país y regional en Baker Hughes, Smith International, Schlumberger y Nabors."),
+            strip("home"), "experience.html", ("See the career log", "Ver la trayectoria"),
+            pic("assets/about/americas-map.svg", None, 760, 860), " row-art--map"),
+        row("row-about", ("About me", "Sobre mí"),
+            ("My degree in petroleum engineering, how I came to the industry and how I run teams and projects.",
+             "Mi título de ingeniero de petróleo, cómo llegué a la industria y cómo dirijo equipos y proyectos."),
+            tiles(about), "about.html", ("Read more about me", "Conocer más sobre mí"),
+            pic("assets/scenes/dusk-card.svg", None, 800, 600)),
     ]
-    cs = []
-    for t_en, t_es, p_en, p_es, href, b_en, b_es in cards:
-        cs.append("""        <article class="card">
-          %s
-          %s
-          <p class="card-foot"><a class="btn" href="%s" data-i18n="%s">%s</a></p>
-        </article>""" % (T("h2", t_en, t_es, cls="card-title"), T("p", p_en, p_es), href, _reg(b_es), esc(b_en)))
     main = """    <section class="hero">
       %s
       %s
@@ -354,9 +411,9 @@ def page_home():
 
     %s
 
-    <section class="cards" %s>
+    <div class="rows">
 %s
-    </section>
+    </div>
 
 %s""" % (
         T("h1", "Drilling and well intervention", "Perforación e intervención de pozos", cls="hero-title"),
@@ -366,9 +423,7 @@ def page_home():
         T("p", "Based in Bogotá, Colombia. Consulting for oil and gas companies across Latin America.",
           "Con sede en Bogotá, Colombia. Consultoría para empresas de petróleo y gas en toda Latinoamérica.",
           cls="hero-note"),
-        strip("home"),
-        _attr_key("aria-label", "home.cards", "Where to start", "Por dónde empezar"),
-        "\n".join(cs), closing())
+        cover("gold"), "\n\n".join(rows), closing())
     return shell("home", "home",
                  ("Miguel Lopez | Drilling and well intervention consultant", "Miguel Lopez | Consultor en perforación e intervención de pozos"),
                  ("Miguel Lopez is a senior petroleum engineer with more than 37 years in oil and gas across Latin America. Consulting on drilling, remedial operations, tenders and contracts.",
@@ -386,6 +441,32 @@ def _reg(es, key=None):
 def _attr_key(name, key, en, es):
     ES[key] = es
     return '%s="%s" data-i18n-attr="%s:%s"' % (name, escq(en), name, key)
+
+
+def pic(src, alt=None, w=0, h=0, cls=None, root=""):
+    """An image. alt=None draws a decorative one (empty alt); alt=(English, Spanish) describes it."""
+    c = ' class="%s"' % cls if cls else ""
+    a = 'alt=""' if alt is None else A("alt", alt[0], alt[1])
+    return '<img%s src="%s%s" %s width="%d" height="%d">' % (c, root, src, a, w, h)
+
+
+def icon(name, size=40, root=""):
+    return pic("assets/icons/%s.svg" % name, None, size, size, root=root)
+
+
+def cover(name, root=""):
+    """The wide picture at the top of a page. It fades out at both sides."""
+    return '<div class="cover">%s</div>' % pic("assets/scenes/%s.svg" % name, None, 2500, 667, root=root)
+
+
+def map_figure():
+    caption = T("figcaption",
+                "Where I have worked: Venezuela, Colombia, Ecuador, Peru, Brazil, Argentina, Bolivia, Trinidad and Tobago, Mexico and Central America.",
+                "Dónde he trabajado: Venezuela, Colombia, Ecuador, Perú, Brasil, Argentina, Bolivia, Trinidad y Tobago, México y Centroamérica.")
+    img = pic("assets/about/americas-map.svg",
+              ("Map of the Americas with a pin on each country where Miguel has worked",
+               "Mapa de América con un marcador en cada país donde Miguel ha trabajado"), 760, 860)
+    return '<figure class="map">%s%s</figure>' % (img, caption)
 
 
 SERVICES = [
@@ -410,32 +491,61 @@ SERVICES = [
 ]
 
 
+SERVICE_ICONS = ["derrick", "gauge", "contract", "magnifier", "trend", "sprout"]
+
+
 def page_services():
     global PAGE
     PAGE = "services"
     rows = []
-    for t_en, t_es, p_en, p_es in SERVICES:
+    for (t_en, t_es, p_en, p_es), ic in zip(SERVICES, SERVICE_ICONS):
         rows.append("""      <li class="service">
+        <div class="service-head">
+          <span class="icon-box icon-box--big" style="--t: %s">%s</span>
+          %s
+        </div>
         %s
-        %s
-      </li>""" % (T("h2", t_en, t_es, cls="service-title"), T("p", p_en, p_es, cls="service-text")))
+      </li>""" % (ICONS[ic][1], icon(ic, 40), T("h2", t_en, t_es, cls="service-title"), T("p", p_en, p_es, cls="service-text")))
+    steps = [("Evaluate progress", "Evaluar el avance"), ("Optimize strategies", "Optimizar las estrategias"),
+             ("Make decisions", "Tomar decisiones"), ("Measure performance", "Medir el desempeño")]
+    tints = ["#ffe9dc", "#def2ef", "#e0e7fe", "#f9e2ea"]
+    method = "\n".join('        <li class="tile" style="--t: %s"><b class="step-no" aria-hidden="true">%d</b>%s</li>' % (tints[i], i + 1, T("span", a, b))
+                       for i, (a, b) in enumerate(steps))
     main = """    <h1 class="hero-title">%s</h1>
+    %s
+
     %s
 
     <ul class="services">
 %s
     </ul>
 
+    <section class="row method" aria-labelledby="method-title">
+      %s
+      %s
+      <ol class="tiles tiles--steps">
+%s
+      </ol>
+    </section>
+
 %s""" % (
         T("span", "How I can help", "Cómo puedo ayudar", key="services.h1"),
         T("p", "I work with oil and gas operators and service companies. These are the areas where I can add the most.",
           "Trabajo con operadoras y empresas de servicios de petróleo y gas. Estas son las áreas donde más puedo aportar.", cls="lede"),
-        "\n".join(rows), closing())
+        cover("midday"), "\n".join(rows),
+        T("h2", "How I work", "Cómo trabajo", cls="row-title", extra='id="method-title"'),
+        T("p", "I work from data and numbers. My method has four steps.",
+          "Trabajo con datos y cifras. Mi método tiene cuatro pasos.", cls="row-text"),
+        method, closing())
     return shell("services", "services",
                  ("Services | Miguel Lopez", "Servicios | Miguel Lopez"),
                  ("Drilling and remedial consulting, drilling optimization, tenders and contracts, business assessments and team development for oil and gas companies.",
                   "Consultoría en perforación y operaciones remediales, optimización de perforación, licitaciones y contratos, evaluaciones de negocio y desarrollo de equipos para empresas de petróleo y gas."),
                  main)
+
+
+LOG_ICONS = {"roku": "magnifier", "wis": "trend", "nabors": "cycle", "own": "sprout",
+             "slb": "contract", "smith": "people", "bh": "gauge", "pdvsa": "derrick"}
 
 
 def page_experience():
@@ -444,7 +554,7 @@ def page_experience():
     items = []
     for e in CAREER:
         yrs = years_t(e["from"], e["to"])
-        name = esc(e["company"]) if e["company"] else T("span", e["company_t"][0], e["company_t"][1])
+        name = ('<span translate="no">%s</span>' % esc(e["company"])) if e["company"] else T("span", e["company_t"][0], e["company_t"][1])
         place = ""
         if e["place"]:
             place = '<p class="log-place">%s</p>' % esc(e["place"][0])
@@ -460,7 +570,10 @@ def page_experience():
         <p class="log-years">%(yrs)s</p>
         <div class="log-rail" aria-hidden="true"></div>
         <div class="log-body">
-          <h2 class="log-company">%(name)s</h2>
+          <div class="log-head">
+            <span class="icon-box" style="--t: %(tint)s">%(icon)s</span>
+            <h2 class="log-company">%(name)s</h2>
+          </div>
 %(place)s
           <ul class="log-roles">
 %(roles)s
@@ -468,11 +581,16 @@ def page_experience():
 %(paras)s
         </div>
       </li>""" % {"c": e["c"], "id": e["id"], "yrs": T("span", yrs[0], yrs[1]), "name": name,
+                   "tint": ICONS[LOG_ICONS[e["id"]]][1], "icon": icon(LOG_ICONS[e["id"]], 32),
                    "place": place, "roles": "\n".join(roles), "paras": paras})
-    main = """    <h1 class="hero-title">%s</h1>
-    %s
-
-    %s
+    main = """    <div class="exp-top">
+      <div class="exp-text">
+        <h1 class="hero-title">%s</h1>
+        %s
+        %s
+      </div>
+      %s
+    </div>
 
     <ol class="log">
 %s
@@ -482,7 +600,7 @@ def page_experience():
         T("span", "Career log", "Trayectoria", key="experience.h1"),
         T("p", "More than 37 years in oil and gas, newest first. Each block on the strip is as wide as the years spent there.",
           "Más de 37 años en petróleo y gas, de lo más reciente a lo más antiguo. Cada bloque de la franja es tan ancho como los años dedicados.", cls="lede"),
-        strip("experience"), "\n".join(items), closing())
+        strip("experience"), map_figure(), "\n".join(items), closing())
     return shell("experience", "experience",
                  ("Experience | Miguel Lopez", "Experiencia | Miguel Lopez"),
                  ("Career log of Miguel Lopez: PDVSA, Baker Hughes, Smith International, Schlumberger, Nabors, Wellbore Integrity Solutions and Roku Tech.",
@@ -493,97 +611,119 @@ def page_experience():
 def page_about():
     global PAGE
     PAGE = "about"
-    steps = [
-        ("Evaluate progress", "Evaluar el avance"),
-        ("Optimize strategies", "Optimizar las estrategias"),
-        ("Make decisions", "Tomar decisiones"),
-        ("Measure performance", "Medir el desempeño"),
+    strengths = [
+        ("shield", ("Execution and risk management", "Ejecución y gestión de riesgos"),
+         ("Well intervention procedures, early risk control and decisive leadership under pressure.",
+          "Procedimientos de intervención de pozos, control anticipado de riesgos y liderazgo firme bajo presión.")),
+        ("badge", ("Service quality", "Calidad del servicio"),
+         ("Every phase of the work follows the service level agreements (SLAs) and what the client expects.",
+          "Cada fase del trabajo sigue los acuerdos de nivel de servicio (SLA) y lo que el cliente espera.")),
+        ("cycle", ("Efficiency and profit", "Eficiencia y rentabilidad"),
+         ("Continuous improvement, better workflows and cost control to raise project margins.",
+          "Mejora continua, mejores flujos de trabajo y control de costos para aumentar los márgenes de los proyectos.")),
+        ("people", ("Leadership and local talent", "Liderazgo y talento local"),
+         ("Leading field teams from several disciplines, training local people and planning succession so operations keep running.",
+          "Dirección de equipos de campo de varias disciplinas, formación de personal local y planes de sucesión para que la operación no se detenga.")),
     ]
-    ways = [
-        ("Results-driven leadership, focused on operational efficiency and profitability.",
-         "Liderazgo orientado a resultados, enfocado en la eficiencia operativa y la rentabilidad."),
-        ("Strict respect for drilling and intervention procedures, and early management of risk.",
-         "Respeto estricto de los procedimientos de perforación e intervención, y gestión anticipada del riesgo."),
-        ("Service quality and full compliance with service level agreements.",
-         "Calidad del servicio y cumplimiento total de los acuerdos de nivel de servicio."),
-        ("Hands-on management of field teams from several disciplines.",
-         "Gestión cercana de equipos de campo de varias disciplinas."),
-        ("Financial management: profit and loss, gross margin, budgets, forecasts and cost control.",
-         "Gestión financiera: pérdidas y ganancias, margen bruto, presupuestos, pronósticos y control de costos."),
-        ("Failure investigation and root-cause analysis for complex technical problems.",
-         "Investigación de fallas y análisis de causa raíz para problemas técnicos complejos."),
+    lis = []
+    for ic, (t_en, t_es), (p_en, p_es) in strengths:
+        lis.append("""          <li class="strength">
+            <span class="icon-box" style="--t: %s">%s</span>
+            <div>
+              %s
+              %s
+            </div>
+          </li>""" % (ICONS[ic][1], icon(ic, 32), T("h3", t_en, t_es, cls="strength-title"), T("p", p_en, p_es)))
+    facts = [
+        ("cap", ("Education", "Estudios"),
+         ("Petroleum Engineering, Universidad del Zulia, 1989", "Ingeniería de Petróleo, Universidad del Zulia, 1989")),
+        ("speech", ("Languages", "Idiomas"),
+         ("English and Spanish, fluent. Portuguese, intermediate.", "Inglés y español, con fluidez. Portugués, nivel intermedio.")),
+        ("clock", ("Experience", "Experiencia"), ("Since 1987", "Desde 1987")),
+        ("pin", ("Based in", "Con sede en"), ("Bogotá, Colombia", "Bogotá, Colombia")),
     ]
-    ol = "\n".join("          <li>%s</li>" % T("span", a, b) for a, b in steps)
-    ul = "\n".join("          <li>%s</li>" % T("span", a, b) for a, b in ways)
-    ES["about.facts.edu"] = "Estudios"
-    ES["about.facts.lang"] = "Idiomas"
-    ES["about.facts.where"] = "Dónde he trabajado"
-    ES["about.facts.base"] = "Con sede en"
-    main = """    <h1 class="hero-title">%(h1)s</h1>
+    fs = []
+    for ic, (l_en, l_es), (v_en, v_es) in facts:
+        fs.append("""          <div class="fact" style="--t: %s">
+            <dt>%s%s</dt>
+            <dd>%s</dd>
+          </div>""" % (ICONS[ic][1], icon(ic, 36), T("span", l_en, l_es), T("span", v_en, v_es)))
+    main = """    <article class="profile" aria-labelledby="profile-name">
+      <div class="cover profile-cover">%(cover)s</div>
 
-    <article class="profile" aria-labelledby="profile-name">
-      <div class="profile-main">
-        <h2 class="profile-name" id="profile-name">Miguel Enrique Lopez Gudiño</h2>
-        %(role)s
-        %(p1)s
-        %(p2)s
-        <ol class="steps">
-%(ol)s
-        </ol>
-        %(p3)s
+      <div class="profile-head">
+        %(badge)s
+        <h1 class="profile-name" id="profile-name" translate="no">Miguel Enrique Lopez Gudiño</h1>
+        %(place)s
+        %(lede)s
       </div>
 
-      <dl class="facts">
-        <div>
-          <dt data-i18n="about.facts.edu">Education</dt>
-          <dd>%(edu)s</dd>
+      <div class="profile-body">
+        <section class="profile-section profile-story" aria-labelledby="start-title">
+          %(h_start)s
+          %(p1)s
+          %(p2)s
+          %(p3)s
+
+          %(h_track)s
+          %(p4)s
+          %(p5)s
+          <ul class="strengths">
+%(lis)s
+          </ul>
+        </section>
+
+        <div class="profile-side">
+          <section class="profile-section" aria-labelledby="glance-title">
+            %(h_glance)s
+            <dl class="glance">
+%(fs)s
+            </dl>
+          </section>
+
+          <section class="profile-section" aria-labelledby="map-title">
+            %(h_map)s
+            %(map)s
+          </section>
         </div>
-        <div>
-          <dt data-i18n="about.facts.lang">Languages</dt>
-          <dd>%(lang)s</dd>
-        </div>
-        <div>
-          <dt data-i18n="about.facts.where">Where I have worked</dt>
-          <dd>%(where)s</dd>
-        </div>
-        <div>
-          <dt data-i18n="about.facts.base">Based in</dt>
-          <dd>Bogotá, Colombia</dd>
-        </div>
-      </dl>
+      </div>
     </article>
 
-    <section class="ways" aria-labelledby="ways-title">
-      %(wt)s
-      <ul class="ways-list">
-%(ul)s
-      </ul>
-    </section>
-
 %(closing)s""" % {
-        "h1": T("span", "About me", "Sobre mí", key="about.h1"),
-        "role": T("p", "Senior petroleum engineer", "Ingeniero de petróleo senior", cls="profile-role"),
-        "p1": T("p", "I am a petroleum engineer with more than 37 years in oil and gas across Latin America. I started in reservoir and drilling engineering and moved on to country and regional management.",
-                "Soy ingeniero de petróleo con más de 37 años en petróleo y gas en toda Latinoamérica. Comencé en ingeniería de yacimientos y de perforación, y pasé después a la gerencia de país y regional."),
-        "p2": T("p", "I like to work from data and numbers. My method has four steps:",
-                "Me gusta trabajar con datos y cifras. Mi método tiene cuatro pasos:"),
-        "ol": ol,
-        "p3": T("p", "I have managed operations, contracts and tenders in several countries for global service companies such as Schlumberger, Nabors and Baker Hughes.",
-                "He dirigido operaciones, contratos y licitaciones en varios países para empresas globales de servicios como Schlumberger, Nabors y Baker Hughes."),
-        "edu": T("span", "Bachelor's degree in Petroleum Engineering, Universidad del Zulia, Venezuela, 1982 to 1989.",
-                 "Ingeniero de Petróleo, Universidad del Zulia, Venezuela, 1982 a 1989."),
-        "lang": T("span", "English and Spanish, fluent. Portuguese, intermediate.",
-                  "Inglés y español, con fluidez. Portugués, nivel intermedio."),
-        "where": T("span", "Venezuela, Colombia, Ecuador, Peru, Brazil, Argentina, Bolivia, Trinidad and Tobago, Mexico and Central America.",
-                   "Venezuela, Colombia, Ecuador, Perú, Brasil, Argentina, Bolivia, Trinidad y Tobago, México y Centroamérica."),
-        "wt": T("h2", "How I work", "Cómo trabajo", cls="ways-title", extra='id="ways-title"'),
-        "ul": ul,
-        "closing": closing(),
+        "cover": pic("assets/scenes/dusk.svg", None, 2500, 667),
+        "badge": pic("assets/about/profile-badge.svg",
+                     ("Illustration of a drilling derrick, in place of a portrait", "Ilustración de una torre de perforación, en lugar de un retrato"),
+                     640, 640, cls="profile-photo"),
+        "place": T("p", "Senior petroleum engineer, Bogotá, Colombia", "Ingeniero de petróleo senior, Bogotá, Colombia", cls="profile-place"),
+        "lede": T("p", "More than 37 years turning complex operating problems into results that are measurable, safe and profitable for oil and gas companies.",
+                  "Más de 37 años convirtiendo problemas operativos complejos en resultados medibles, seguros y rentables para empresas de petróleo y gas.",
+                  cls="profile-lede"),
+        "h_start": T("h2", "Where it started", "Cómo empezó", extra='id="start-title"'),
+        "p1": T("p", "My link with the oil industry began long before I stood on a rig. I grew up in Northwestern Venezuela, moving from town to town and city to city because my parents' jobs kept relocating the family.",
+                "Mi vínculo con la industria petrolera comenzó mucho antes de pisar un taladro. Crecí en el noroccidente de Venezuela, mudándome de pueblo en pueblo y de ciudad en ciudad porque los trabajos de mis padres los trasladaban con frecuencia."),
+        "p2": T("p", "On our trips to Zulia State, the heart of Venezuelan oil, I watched pumpjacks nodding and flares burning day and night. That image stayed with me. I studied Petroleum Engineering at Universidad del Zulia (LUZ) and graduated in 1989.",
+                "En nuestros viajes al estado Zulia, el corazón petrolero de Venezuela, veía los balancines subir y bajar y los mechurrios arder de día y de noche. Esa imagen me marcó. Estudié Ingeniería de Petróleo en la Universidad del Zulia (LUZ) y me gradué en 1989."),
+        "p3": T("p", "Growing up on the move gave me adaptability, resilience and an easy way with people from very different backgrounds. It is the base of how I lead in the field: I fit into any operation, learn the local dynamics and build trust from the wellsite crew to senior management.",
+                "Crecer en movimiento me dio adaptabilidad, resiliencia y facilidad para tratar con personas de todo tipo de orígenes. Es la base de mi liderazgo en campo: me integro a cualquier operación, entiendo la dinámica local y construyo confianza desde la cuadrilla en el pozo hasta la alta gerencia."),
+        "h_track": T("h2", "Track record", "Trayectoria y resultados", cls="profile-h2--next"),
+        "p4": T("p", "I have led operations and projects across Latin America with one standard: comply strictly with what was agreed, then beat the targets. There is little room for error in this industry, so I combine close technical control in the field with a focus on efficiency and profit.",
+                "He dirigido operaciones y proyectos en toda Latinoamérica con un solo estándar: cumplir estrictamente lo acordado y luego superar las metas. En esta industria hay poco margen de error, por eso combino un control técnico cercano en campo con un enfoque en eficiencia y rentabilidad."),
+        "p5": T("p", "As a technical consultant and advisor, I help operators and oilfield service companies with key decisions. My strengths:",
+                "Como consultor y asesor técnico, ayudo a operadoras y empresas de servicios petroleros en decisiones clave. Mis fortalezas:"),
+        "lis": "\n".join(lis),
+        "h_glance": T("h2", "At a glance", "De un vistazo", extra='id="glance-title"'),
+        "fs": "\n".join(fs),
+        "h_map": T("h2", "Where I have worked", "Dónde he trabajado", extra='id="map-title"'),
+        "map": map_figure(),
+        "closing": closing(title=("Need to reduce field risk or meet your contract targets?",
+                                  "¿Necesita reducir los riesgos en campo o cumplir las metas de su contrato?"),
+                           sub=("Put more than 37 years of hands-on experience in Latin America to work on your next project.",
+                                "Ponga más de 37 años de experiencia práctica en Latinoamérica a trabajar en su próximo proyecto.")),
     }
     return shell("about", "about",
                  ("About | Miguel Lopez", "Sobre mí | Miguel Lopez"),
-                 ("About Miguel Lopez: petroleum engineer, 37 years in oil and gas across Latin America, languages and way of working.",
-                  "Sobre Miguel Lopez: ingeniero de petróleo, 37 años en petróleo y gas en Latinoamérica, idiomas y forma de trabajar."),
+                 ("About Miguel Lopez: how he came to oil and gas, his track record across Latin America, his languages and where he has worked.",
+                  "Sobre Miguel Lopez: cómo llegó al petróleo y al gas, su trayectoria en Latinoamérica, sus idiomas y dónde ha trabajado."),
                  main)
 
 
@@ -600,6 +740,7 @@ def page_contact():
     <div class="contact-grid">
       <div class="contact-intro">
         %(lede)s
+        <div class="contact-art">%(art)s</div>
       </div>
 
       <!--
@@ -635,6 +776,7 @@ def page_contact():
       </form>
     </div>""" % {
         "h1": T("span", "Contact", "Contacto", key="contact.h1"),
+        "art": pic("assets/scenes/dawn-card.svg", None, 800, 600),
         "lede": T("p", "Have a project in mind? Send me a message and I will reply by email.",
                   "¿Tiene un proyecto en mente? Envíeme un mensaje y le responderé por correo electrónico.", cls="lede"),
     }
@@ -655,10 +797,13 @@ def page_404():
     <p class="actions">
       <a class="btn" href="/services.html" data-i18n="notfound.btn1">See the services</a>
       <a class="btn btn--quiet" href="/experience.html" data-i18n="notfound.btn2">See the career log</a>
-    </p>""" % (
+    </p>
+
+    %s""" % (
         T("h1", "This page does not exist", "Esta página no existe", cls="hero-title"),
         T("p", "The link may be out of date or mistyped. Try one of these instead.",
-          "Es posible que el enlace esté desactualizado o mal escrito. Pruebe con uno de estos.", cls="lede lede--after"))
+          "Es posible que el enlace esté desactualizado o mal escrito. Pruebe con uno de estos.", cls="lede lede--after"),
+        cover("dawn", root="/"))
     return shell("notfound", "404", ("Page not found | Miguel Lopez", "Página no encontrada | Miguel Lopez"),
                  ("This page does not exist.", "Esta página no existe."), main, root="/")
 

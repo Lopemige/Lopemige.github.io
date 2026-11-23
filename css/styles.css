@@ -1,8 +1,8 @@
 /* ==========================================================================
    Miguel Lopez: consulting site
-   The page is a pasteboard with white panels on it. The one distinctive piece is the career
-   strip and log: a drilling log where every company is a layer, as wide (strip) or as tall
-   (log) as the years spent there. Everything else stays quiet.
+   The page is a pasteboard with white panels on it. The distinctive pieces are the career
+   strip and log (a drilling log where every company is a layer, as wide or as tall as the years
+   spent there) and the drawn oil-field scenes, in the same layout as the portfolio site.
    ========================================================================== */
 
 /* ---------- Tokens ---------- */
@@ -203,7 +203,7 @@ a:hover { text-decoration-thickness: 0.16em; }
 .hero-note { margin-top: 1rem; color: var(--ink-soft); }
 
 /* ---------- Career strip (Home and Experience) ---------- */
-.strip-wrap { margin-top: clamp(2rem, 5vw, 3.5rem); }
+.strip-wrap { margin-top: clamp(2rem, 5vw, 3.5rem); container-type: inline-size; }
 .strip {
   display: flex;
   gap: 3px;
@@ -235,31 +235,101 @@ a:hover { text-decoration-thickness: 0.16em; }
 }
 @media (max-width: 640px) {
   .strip { height: 2.2rem; }
+}
+/* The names only fit when the strip is wide enough; the text around it lists the companies. */
+@container (max-width: 40rem) {
   .strip b { display: none; }
 }
 
-/* ---------- Home cards ---------- */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
-  gap: var(--gap);
-  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+/* ---------- Pictures, tiles and the rows on the home page ---------- */
+.cover {
+  aspect-ratio: 15 / 4;
+  overflow: hidden;
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 86%, transparent 100%);
 }
-.card {
+.cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 760px) {
+  .cover {
+    aspect-ratio: 2 / 1;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+  }
+}
+
+.icon-box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--t, #fff);
+}
+.icon-box img { width: 2rem; height: 2rem; }
+.icon-box--big { width: 4.5rem; height: 4.5rem; }
+.icon-box--big img { width: 2.5rem; height: 2.5rem; }
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.25rem, 1fr));
+  gap: 0.75rem;
+  max-width: 48rem;
+  margin-top: 1.5rem;
+}
+.tile {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: clamp(1.25rem, 2.6vw, 2rem);
-  background: var(--artboard);
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.1rem 0.5rem 0.9rem;
+  background: var(--t, #fff);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
 }
-.card-title {
-  font-size: var(--step-2);
+.tile img { width: 2.5rem; height: 2.5rem; }
+.tiles--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 24rem; }
+.tiles--steps { grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); max-width: 52rem; }
+.step-no {
+  font-size: 2.25rem;
+  font-weight: 800;
+  font-stretch: 62%;
+  line-height: 1;
+  color: var(--accent-deep);
+}
+@media (max-width: 560px) {
+  .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+  .tiles--steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile { padding-inline: 0.25rem; font-size: 0.875rem; }
+}
+
+.rows { display: grid; gap: clamp(3rem, 7vw, 5.5rem); margin-top: clamp(3rem, 7vw, 5.5rem); }
+.row-title {
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
   font-weight: 800;
   font-stretch: 75%;
-  line-height: 1.05;
+  line-height: 1;
 }
-.card p { max-width: 30rem; }
-.card-foot { margin-top: auto; padding-top: 0.75rem; }
+.row-text { max-width: 34rem; margin-top: 0.9rem; }
+.row-foot { margin-top: 1.5rem; }
+.row .strip-wrap { max-width: 48rem; margin-top: 1.5rem; }
+.row--art {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+}
+.row-art { overflow: hidden; background: var(--artboard); }
+.row-art img { display: block; width: 100%; height: auto; }
+.row-art--map { background: none; text-align: center; }
+.row-art--map img { max-width: 24rem; margin-inline: auto; }
+@media (max-width: 900px) {
+  .row--art { grid-template-columns: 1fr; }
+  .row-art { max-width: 32rem; }
+}
+.method { margin-top: clamp(3rem, 7vw, 5.5rem); }
 
 /* ---------- Services ---------- */
 .services { margin-top: clamp(2.5rem, 6vw, 4.5rem); }
@@ -277,6 +347,7 @@ a:hover { text-decoration-thickness: 0.16em; }
   font-stretch: 75%;
   line-height: 1.05;
 }
+.service-head { display: flex; align-items: center; gap: 1rem; }
 .service-text { max-width: 38rem; }
 @media (max-width: 760px) {
   .service { grid-template-columns: 1fr; }
@@ -303,6 +374,9 @@ ol.log {
   padding-top: 0.15rem;
 }
 .log-rail { background: var(--c); }
+.log-head { display: flex; align-items: center; gap: 0.9rem; }
+.log-head .icon-box { width: 3rem; height: 3rem; }
+.log-head .icon-box img { width: 1.75rem; height: 1.75rem; }
 .log-company {
   font-size: var(--step-2);
   font-weight: 800;
@@ -323,53 +397,94 @@ ol.log {
   .log-body { grid-column: 2; grid-row: 2; }
 }
 
-/* ---------- About ---------- */
-.profile {
+/* The map of the Americas: on the Experience page and in the About card */
+.exp-top {
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   gap: clamp(1.5rem, 4vw, 4rem);
-  margin-top: clamp(1.5rem, 4vw, 3rem);
-  padding: clamp(1.25rem, 3.4vw, 3rem);
-  background: var(--artboard);
+  align-items: center;
 }
-.profile-name {
-  font-size: var(--step-2);
-  font-weight: 800;
-  font-stretch: 75%;
-  line-height: 1.05;
-}
-.profile-role { margin-top: 0.2rem; color: var(--ink-soft); font-weight: 600; }
-.profile-main p:not(.profile-role) { max-width: 38rem; margin-top: 1rem; }
-ol.steps {
-  list-style: decimal;
-  margin: 0.75rem 0 0;
-  padding-left: 1.4rem;
-  font-weight: 600;
-}
-ol.steps li { padding-left: 0.3rem; }
-ol.steps + p { margin-top: 1rem; }
-.facts { display: grid; gap: 1.25rem; align-content: start; }
-.facts dt { font-size: var(--step--1); font-weight: 700; color: var(--ink-soft); }
-.facts dd { margin-top: 0.15rem; }
-.facts > div { padding-top: 0.9rem; border-top: 2px solid var(--ink); }
+.exp-text .strip-wrap { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
+.map { background: var(--artboard); padding: 0.75rem 0.75rem 1rem; }
+.map img { display: block; width: 100%; height: auto; }
+.map figcaption { margin-top: 0.6rem; font-size: 0.875rem; line-height: 1.4; color: var(--ink-soft); }
 @media (max-width: 860px) {
-  .profile { grid-template-columns: 1fr; }
+  .exp-top { grid-template-columns: 1fr; }
+  .map { max-width: 26rem; }
 }
 
-.ways { margin-top: clamp(2.5rem, 6vw, 4.5rem); }
-.ways-title {
+/* ---------- About: the profile card ---------- */
+.profile {
+  --pad: clamp(1.25rem, 3.5vw, 3rem);
+  --photo: clamp(7.5rem, 14vw, 11.5rem);
+  background: var(--artboard);
+  padding-bottom: clamp(1.25rem, 3vw, 2.5rem);
+}
+.profile-cover { margin-top: 0; }
+.profile-head { padding-inline: var(--pad); }
+.profile-photo {
+  display: block;
+  position: relative;
+  width: var(--photo);
+  height: var(--photo);
+  margin-top: calc(var(--photo) / -2);
+  border: 6px solid var(--artboard);
+  border-radius: 50%;
+  background: var(--artboard);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+  object-fit: cover;
+}
+.profile-name {
+  margin-top: 1rem;
+  font-size: clamp(2.1rem, 5vw, 3.75rem);
+  font-weight: 800;
+  font-stretch: 62%;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.profile-place { margin-top: 0.5rem; color: var(--ink-soft); }
+.profile-lede { max-width: 44rem; margin-top: 1.25rem; font-size: var(--step-1); line-height: 1.45; }
+.profile-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  margin: clamp(1.5rem, 3vw, 2.5rem) var(--pad) 0;
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+}
+.profile-section h2 {
+  margin-bottom: 1rem;
   font-size: var(--step-2);
   font-weight: 800;
   font-stretch: 75%;
   line-height: 1.05;
 }
-.ways-list {
+.profile-section h2.profile-h2--next { margin-top: clamp(2rem, 4vw, 3rem); }
+.profile-story p { max-width: 40rem; font-size: 1.125rem; line-height: 1.6; }
+.profile-story p + p { margin-top: 1rem; }
+.strengths { max-width: 40rem; margin-top: 1.25rem; }
+.strength {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
-  gap: 0 var(--gap);
-  margin-top: 1.25rem;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
 }
-.ways-list li { padding-block: 0.9rem; border-top: 2px solid var(--ink); }
+.strength-title { font-size: 1.125rem; font-weight: 700; line-height: 1.2; }
+.strength p { margin-top: 0.25rem; font-size: 1.0625rem; line-height: 1.5; }
+.profile-side { display: grid; align-content: start; gap: clamp(2rem, 4vw, 3rem); }
+.glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+.fact { display: grid; align-content: start; gap: 0.3rem; padding: 1rem; background: var(--t); }
+.fact dt { display: grid; gap: 0.5rem; font-size: 0.8125rem; font-weight: 700; color: var(--ink-soft); }
+.fact dt img { width: 2.25rem; height: 2.25rem; }
+.fact dd { font-size: 0.9375rem; font-weight: 600; line-height: 1.3; }
+.profile .map { padding: 0; background: none; }
+@media (max-width: 900px) {
+  .profile-body { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .glance { grid-template-columns: 1fr; }
+}
 
 /* ---------- Contact ---------- */
 .contact-grid {
@@ -379,6 +494,11 @@ ol.steps + p { margin-top: 1rem; }
   margin-top: clamp(1rem, 3vw, 2rem);
 }
 .contact-intro .lede { margin-top: 0; }
+.contact-art { aspect-ratio: 4 / 3; margin-top: 2rem; overflow: hidden; }
+.contact-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 860px) {
+  .contact-art { aspect-ratio: 2 / 1; }
+}
 @media (max-width: 860px) {
   .contact-grid { grid-template-columns: 1fr; }
 }
@@ -420,6 +540,7 @@ ol.steps + p { margin-top: 1rem; }
   line-height: 0.98;
   letter-spacing: -0.01em;
 }
+.closing-sub { max-width: 34rem; margin-top: 1rem; font-size: var(--step-1); line-height: 1.45; }
 .closing-action { margin-top: 1.5rem; }
 
 /* ---------- Footer ---------- */

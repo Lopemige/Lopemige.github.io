@@ -22,8 +22,16 @@ css/styles.css       all the styling
 js/site.js           language switch, footer year, contact form
 js/i18n.js           the Spanish text (generated)
 tools/build.py       the page generator
+tools/art.py         draws the pictures in assets/ (scenes, icons, map, round badge)
+assets/              the pictures: scenes/, icons/, about/
 favicon.svg          the small icon in the browser tab
 ```
+
+## Pictures
+
+Every picture is drawn by `tools/art.py`, so there is no stock photo and no licence to worry about. Run `python3 tools/art.py` to redraw them (the map also needs the free Natural Earth country data, see the top of the file).
+
+To put a real photo in the round picture on the About page, save it as `assets/about/miguel-lopez.jpg` (square, at least 640 x 640 pixels), then in `page_about` in `tools/build.py` change `assets/about/profile-badge.svg` to `assets/about/miguel-lopez.jpg`, write a new description of the photo for the alt text (English and Spanish), and build again.
 
 ## Turn on the contact form
 
