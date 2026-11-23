@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from art import ICONS   # tile colours live next to the drawings
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "20261123e"      # change it whenever css/styles.css or a .js file changes
+VERSION = "20261123f"      # change it whenever css/styles.css or a .js file changes
 YEAR = "2026"
 NAME = "Miguel Lopez"
 ES = {}                    # key -> Spanish text, written to js/i18n.js
@@ -160,7 +160,7 @@ ES["closing.btn"] = "Envíeme un mensaje"
 
 def shell(page, current, title, desc, main, root="", indexable=False, body_attrs=""):
     """A complete page. title and desc are (English, Spanish) pairs."""
-    robots = "" if indexable else '  <meta name="robots" content="noindex, nofollow">\n'
+    robots = "" if indexable else '  <meta name="robots" content="noindex, nofollow, noarchive">\n'
     ES[page + ".title"] = title[1]
     ES[page + ".desc"] = desc[1]
     ES[page + ".ogtitle"] = title[1]
@@ -209,13 +209,13 @@ def shell(page, current, title, desc, main, root="", indexable=False, body_attrs
 CAREER = [
     {
         "id": "roku", "short": "", "w": 2, "c": 1, "company": "Roku Tech",
-        "from": "2024", "to": None, "place": ("Bogotá, Colombia", "Bogotá, Colombia"),
+        "from": "2024", "to": None, "place": None,
         "roles": [(("Consulting and Sales Manager, Latin America", "Gerente de Consultoría y Ventas, Latinoamérica"), None)],
         "text": [
-            ("Consulting for oil and gas companies, mainly on drilling and on fishing and remedial operations.",
-             "Consultoría para empresas de petróleo y gas, principalmente en perforación y en operaciones de pesca y remediales."),
-            ("The company also supports oil and gas extraction, rents machinery and equipment, and offers engineering and technical consulting.",
-             "La empresa también apoya la extracción de petróleo y gas, alquila maquinaria y equipos, y ofrece ingeniería y consultoría técnica."),
+            ("Consulting for operators, mainly on drilling, fishing and remedial operations.",
+             "Consultoría para operadoras, principalmente en perforación, pesca y operaciones remediales."),
+            ("The company also provides extraction support, equipment rental, engineering and technical consulting.",
+             "La empresa también ofrece apoyo a la extracción, alquiler de equipos, ingeniería y consultoría técnica."),
         ],
     },
     {
@@ -223,10 +223,10 @@ CAREER = [
         "from": "2023", "to": "2024", "place": None,
         "roles": [(("Country Operational Manager, Mexico and Central America", "Gerente Operativo de País, México y Centroamérica"), None)],
         "text": [
-            ("I managed clients and results in Mexico, with responsibility for the profit and loss account and a team of 105 people. I led the tenders and the operating strategy.",
-             "Dirigí los clientes y los resultados en México, con responsabilidad sobre el estado de pérdidas y ganancias y un equipo de 105 personas. Lideré las licitaciones y la estrategia operativa."),
-            ("Revenue grew 70% year over year between 2022 and 2023, and profitability grew 115%. Days sales outstanding (DSO) fell by 60 days.",
-             "Entre 2022 y 2023, los ingresos crecieron 70% frente al año anterior y la rentabilidad creció 115%. Los días de ventas por cobrar (DSO) se redujeron en 60 días."),
+            ("In Mexico I managed clients, results, the P&L and a team of 105 people. I led the tenders and the operating strategy.",
+             "En México dirigí los clientes, los resultados, el P&L y un equipo de 105 personas. Lideré las licitaciones y la estrategia operativa."),
+            ("From 2022 to 2023, revenue grew 70% year over year and profitability 115%. Days sales outstanding (DSO) fell by 60 days.",
+             "De 2022 a 2023, los ingresos crecieron 70% frente al año anterior y la rentabilidad 115%. Los días de ventas por cobrar (DSO) bajaron 60 días."),
         ],
     },
     {
@@ -237,8 +237,8 @@ CAREER = [
             (("Operations Manager, Ecuador", "Gerente de Operaciones, Ecuador"), ("2018", "2019")),
         ],
         "text": [
-            ("In Colombia I managed client contracts and rig market opportunities, to raise the number of active rigs and widen the client base. I led the growth of Nabors Drilling Solutions, mainly casing and tubular running.",
-             "En Colombia gestioné los contratos con clientes y las oportunidades del mercado de taladros, para aumentar los taladros activos y ampliar la base de clientes. Lideré el crecimiento de Nabors Drilling Solutions, sobre todo en corrida de revestimiento y tubulares."),
+            ("In Colombia I managed client contracts and rig market opportunities. The aim was to raise the number of active rigs and widen the client base. I led the growth of Nabors Drilling Solutions, mainly casing and tubular running.",
+             "En Colombia gestioné los contratos con clientes y las oportunidades del mercado de taladros. El objetivo era aumentar los taladros activos y ampliar la base de clientes. Lideré el crecimiento de Nabors Drilling Solutions, sobre todo en corrida de revestimiento y tubulares."),
             ("I worked with automated rigs, performance automation, wellbore services and remote operations. I also worked on energy transition: hybrid energy systems and green fuels that reduce emissions.",
              "Trabajé con taladros automatizados, automatización del desempeño, servicios de pozo y operaciones remotas. También trabajé en la transición energética: sistemas de energía híbridos y combustibles verdes que reducen emisiones."),
             ("In Ecuador I led the restart of operations in the rig market. We began with a single rig, and it delivered outstanding performance.",
@@ -261,12 +261,12 @@ CAREER = [
             (("Manager, Drilling Tools and Remedial, Peru, Colombia and Ecuador", "Gerente de Herramientas de Perforación y Remediales, Perú, Colombia y Ecuador"), ("2010", "2013")),
         ],
         "text": [
-            ("In Brazil I led client relations and performance for bits and drilling tools. I was responsible for the profit and loss account and a team of 172 people, and I took part in tenders with several clients.",
-             "En Brasil dirigí la relación con los clientes y el desempeño de barrenas y herramientas de perforación. Fui responsable del estado de pérdidas y ganancias y de un equipo de 172 personas, y participé en licitaciones con varios clientes."),
-            ("For South America I set the marketing and sales strategy of the segment. That meant new technology, tender strategy, market analysis, competitor monitoring and input to research and development.",
-             "Para Sudamérica definí la estrategia de mercadeo y ventas del segmento. Eso incluyó nuevas tecnologías, estrategia de licitaciones, análisis de mercado, seguimiento de la competencia y aportes a investigación y desarrollo."),
-            ("Before that I led client relations and results for drilling tools and remedial services in Peru, Colombia and Ecuador.",
-             "Antes dirigí la relación con los clientes y los resultados de herramientas de perforación y servicios remediales en Perú, Colombia y Ecuador."),
+            ("In Brazil I led the drill bits and drilling tools business, from client relations to performance. I was responsible for the P&L and a team of 172 people. I also took part in tenders with several clients.",
+             "En Brasil lideré el negocio de brocas y herramientas de perforación, desde la relación con los clientes hasta el desempeño. Fui responsable del P&L y de un equipo de 172 personas. También participé en licitaciones con varios clientes."),
+            ("For South America I set the sales and marketing strategy of the segment. That meant new technology, tender strategy, market analysis, competitor monitoring and input to R&D.",
+             "Para Sudamérica definí la estrategia de ventas y mercadeo del segmento. Eso incluyó nuevas tecnologías, estrategia de licitaciones, análisis de mercado, seguimiento de la competencia y aportes a I+D."),
+            ("Before that I led the Drilling Tools and Remedial unit in Peru, Colombia and Ecuador.",
+             "Antes lideré la unidad de Herramientas de Perforación y Remediales en Perú, Colombia y Ecuador."),
         ],
     },
     {
@@ -277,8 +277,8 @@ CAREER = [
             (("Venezuela Country Operation Manager, Drilling and Remedial Tools", "Gerente de Operaciones de País en Venezuela, Herramientas de Perforación y Remediales"), ("2005", "2007")),
         ],
         "text": [
-            ("I led a tenfold growth of the business by introducing new products, services and technologies in a competitive market where price mattered. I oversaw the facilities and civil works for the Neiva base, and I took part in the merger with Schlumberger.",
-             "Lideré un crecimiento de diez veces del negocio al introducir nuevos productos, servicios y tecnologías en un mercado competitivo y sensible al precio. Supervisé las instalaciones y obras civiles de la base de Neiva, y participé en el proceso de fusión con Schlumberger."),
+            ("I led a tenfold growth of the business by introducing new products, services and technologies in a competitive market where price mattered. I oversaw the facilities and civil works for the Neiva base. I also took part in the merger with Schlumberger.",
+             "Lideré un crecimiento de diez veces del negocio al introducir nuevos productos, servicios y tecnologías en un mercado competitivo, sensible al precio. Supervisé las instalaciones y obras civiles de la base de Neiva. También participé en la fusión con Schlumberger."),
             ("Earlier, as country manager for Venezuela, I grew the business with the company's wider product range and won several contracts through tenders. I also expanded the base in Maturín.",
              "Antes, como gerente de país en Venezuela, hice crecer el negocio con el portafolio ampliado de la empresa y gané varios contratos mediante licitaciones. También amplié la base en Maturín."),
         ],
@@ -288,7 +288,7 @@ CAREER = [
         "from": "1997", "to": "2004", "place": None,
         "roles": [
             (("Latin America Drilling Optimization Manager, Integrated Projects", "Gerente de Optimización de Perforación para Latinoamérica, Proyectos Integrados"), ("2003", "2004")),
-            (("Latin America OASIS Senior Drilling Optimization Engineer", "Ingeniero Senior de Optimización de Perforación OASIS, Latinoamérica"), ("2001", "2003")),
+            (("Latin America OASIS Senior Drilling Optimization Engineer", "Ingeniero Principal de Optimización de Perforación OASIS, Latinoamérica"), ("2001", "2003")),
             (("Venezuela Drilling Operation Manager", "Gerente de Operaciones de Perforación, Venezuela"), ("1999", "2001")),
             (("Venezuela Drilling Integration and Operations Manager", "Gerente de Integración y Operaciones de Perforación, Venezuela"), ("1998", "1999")),
             (("Venezuela Drilling Integration Coordinator", "Coordinador de Integración de Perforación, Venezuela"), ("1997", "1998")),
@@ -296,8 +296,8 @@ CAREER = [
         "text": [
             ("I managed integrated projects that used new technology for directional wells, such as rotary steerable and vertical drilling systems. In western Venezuela they cut drilling time and reached the geological targets.",
              "Gestioné proyectos integrados con nuevas tecnologías para pozos direccionales, como sistemas rotativos direccionales y de perforación vertical. En el occidente de Venezuela redujeron el tiempo de perforación y alcanzaron los objetivos geológicos."),
-            ("On the OASIS team I analyzed drilling performance in Venezuela, Colombia, Argentina, Bolivia, Brazil, Ecuador, Peru and Trinidad and Tobago. The aim was to cut time and cost for clients without raising the well budget (AFE).",
-             "En el equipo OASIS analicé el desempeño de la perforación en Venezuela, Colombia, Argentina, Bolivia, Brasil, Ecuador, Perú y Trinidad y Tobago. El objetivo era reducir tiempo y costos para los clientes sin aumentar el presupuesto del pozo (AFE)."),
+            ("On the OASIS team I analyzed drilling performance in Venezuela, Colombia, Argentina, Bolivia, Brazil, Ecuador, Peru, Trinidad and Tobago. The aim was to cut time and cost for clients without raising the well budget (AFE).",
+             "En el equipo OASIS analicé el desempeño de la perforación en Venezuela, Colombia, Argentina, Bolivia, Brasil, Ecuador, Perú, Trinidad y Tobago. El objetivo era reducir tiempo y costos para los clientes sin aumentar el presupuesto del pozo (AFE)."),
             ("On the Morichal project I managed field and administrative operations for 20 re-entry wells. They reached their geological targets and were drilled in record time.",
              "En el proyecto Morichal gestioné las operaciones de campo y administrativas de 20 pozos de reentrada. Alcanzaron sus objetivos geológicos y se perforaron en tiempo récord."),
         ],
@@ -312,7 +312,7 @@ CAREER = [
         ],
         "text": [
             ("I started as a reservoir engineer on Lake Maracaibo, then moved to offshore drilling and workover. I led a team of five engineers and four workover rigs.",
-             "Comencé como ingeniero de yacimientos en el Lago de Maracaibo y pasé luego a perforación y reacondicionamiento costa afuera. Dirigí un equipo de cinco ingenieros y cuatro taladros de reacondicionamiento."),
+             "Comencé como ingeniero de yacimientos en el Lago de Maracaibo, luego pasé a perforación y reacondicionamiento costa afuera. Dirigí un equipo de cinco ingenieros y cuatro taladros de reacondicionamiento."),
             ("My last role was budget analyst: I calculated the yearly investment budgets (AFEs) for all the drilling work of the Petroleum Engineering Department.",
              "Mi último cargo fue analista de presupuesto: calculé los presupuestos anuales de inversión (AFE) de todas las actividades de perforación del Departamento de Ingeniería de Petróleo."),
         ],
@@ -385,21 +385,21 @@ def page_home():
     about = [("cap", "Universidad del Zulia", "Universidad del Zulia"),
              ("speech", "Three languages", "Tres idiomas"),
              ("clock", "Since 1987", "Desde 1987"),
-             ("pin", "Bogotá, Colombia", "Bogotá, Colombia")]
+             ("globe", "Remote work", "Trabajo remoto")]
     rows = [
         row("row-services", ("How I can help", "Cómo puedo ayudar"),
-            ("Drilling optimization, remedial operations, tenders and contracts, and team development.",
-             "Optimización de perforación, operaciones remediales, licitaciones y contratos, y desarrollo de equipos."),
+            ("Drilling optimization, remedial operations, tenders, contracts and team development.",
+             "Optimización de perforación, operaciones remediales, licitaciones, contratos y desarrollo de equipos."),
             tiles(services, " tiles--3"), "services.html", ("See the services", "Ver los servicios"),
             pic("assets/scenes/midday-card.svg", None, 800, 600)),
         row("row-experience", ("More than 37 years", "Más de 37 años"),
-            ("From reservoir engineer at PDVSA to country and regional manager at Baker Hughes, Smith International, Schlumberger and Nabors.",
-             "De ingeniero de yacimientos en PDVSA a gerente de país y regional en Baker Hughes, Smith International, Schlumberger y Nabors."),
+            ("From reservoir engineer at PDVSA to leadership roles at Baker Hughes, Smith International, Schlumberger and Nabors.",
+             "De ingeniero de yacimientos en PDVSA a cargos de liderazgo en Baker Hughes, Smith International, Schlumberger y Nabors."),
             strip("home"), "experience.html", ("See the career log", "Ver la trayectoria"),
             pic("assets/about/americas-map.svg", None, 760, 860), " row-art--map"),
         row("row-about", ("About me", "Sobre mí"),
-            ("My degree in petroleum engineering, how I came to the industry and how I run teams and projects.",
-             "Mi título de ingeniero de petróleo, cómo llegué a la industria y cómo dirijo equipos y proyectos."),
+            ("My petroleum engineering degree, how I came to the industry and how I lead teams.",
+             "Mi título de ingeniero de petróleo, cómo llegué a la industria y cómo dirijo equipos."),
             tiles(about), "about.html", ("Read more about me", "Conocer más sobre mí"),
             pic("assets/scenes/dusk-card.svg", None, 800, 600)),
     ]
@@ -417,17 +417,17 @@ def page_home():
 
 %s""" % (
         T("h1", "Drilling and well intervention", "Perforación e intervención de pozos", cls="hero-title"),
-        T("p", "I am a senior petroleum engineer with more than 37 years in oil and gas across Latin America. I consult on drilling, fishing and remedial operations, on tenders and contracts, and on operational performance.",
-          "Soy ingeniero de petróleo senior, con más de 37 años en petróleo y gas en toda Latinoamérica. Asesoro en perforación, en operaciones de pesca y remediales, en licitaciones y contratos, y en desempeño operacional.",
+        T("p", "I am a senior petroleum engineer with more than 37 years of experience in Latin America. I consult on drilling, fishing, remedial operations, tenders, contracts and operational performance.",
+          "Soy ingeniero de petróleo con más de 37 años de experiencia en Latinoamérica. Asesoro en perforación, pesca, operaciones remediales, licitaciones, contratos y desempeño operacional.",
           cls="lede"),
-        T("p", "Based in Bogotá, Colombia. Consulting for oil and gas companies across Latin America.",
-          "Con sede en Bogotá, Colombia. Consultoría para empresas de petróleo y gas en toda Latinoamérica.",
+        T("p", "I work remotely with oil and gas companies across Latin America.",
+          "Trabajo de forma remota con empresas de petróleo y gas de toda Latinoamérica.",
           cls="hero-note"),
         cover("gold"), "\n\n".join(rows), closing())
     return shell("home", "home",
                  ("Miguel Lopez | Drilling and well intervention consultant", "Miguel Lopez | Consultor en perforación e intervención de pozos"),
-                 ("Miguel Lopez is a senior petroleum engineer with more than 37 years in oil and gas across Latin America. Consulting on drilling, remedial operations, tenders and contracts.",
-                  "Miguel Lopez es ingeniero de petróleo senior con más de 37 años en petróleo y gas en Latinoamérica. Consultoría en perforación, operaciones remediales, licitaciones y contratos."),
+                 ("Miguel Lopez is a senior petroleum engineer with more than 37 years of experience in Latin America. Remote consulting on drilling, remedial operations, tenders and contracts.",
+                  "Miguel Lopez es ingeniero de petróleo con más de 37 años de experiencia en Latinoamérica. Consultoría remota en perforación, operaciones remediales, licitaciones y contratos."),
                  main)
 
 
@@ -461,8 +461,8 @@ def cover(name, root=""):
 
 def map_figure():
     caption = T("figcaption",
-                "Where I have worked: Venezuela, Colombia, Ecuador, Peru, Brazil, Argentina, Bolivia, Trinidad and Tobago, Mexico and Central America.",
-                "Dónde he trabajado: Venezuela, Colombia, Ecuador, Perú, Brasil, Argentina, Bolivia, Trinidad y Tobago, México y Centroamérica.")
+                "Where I have worked: Venezuela, Colombia, Ecuador, Peru, Brazil, Argentina, Bolivia, Mexico, Central America, Trinidad and Tobago.",
+                "Dónde he trabajado: Venezuela, Colombia, Ecuador, Perú, Brasil, Argentina, Bolivia, México, Centroamérica, Trinidad y Tobago.")
     img = pic("assets/about/americas-map.svg",
               ("Map of the Americas with a pin on each country where Miguel has worked",
                "Mapa de América con un marcador en cada país donde Miguel ha trabajado"), 760, 860)
@@ -471,23 +471,23 @@ def map_figure():
 
 SERVICES = [
     ("Drilling, fishing and remedial operations", "Perforación, pesca y operaciones remediales",
-     "Consulting for oil and gas companies on drilling, fishing and remedial work, including the activities that support extraction.",
-     "Consultoría para empresas de petróleo y gas en perforación, pesca y trabajos remediales, incluidas las actividades que apoyan la extracción."),
+     "Consulting on drilling, fishing and remedial work, including the activities that support extraction.",
+     "Consultoría en perforación, pesca y trabajos remediales, incluidas las actividades que apoyan la extracción."),
     ("Drilling optimization", "Optimización de la perforación",
      "Analysis of drilling performance to reduce time and cost. New technology is brought in without raising the well budget (AFE).",
      "Análisis del desempeño de la perforación para reducir tiempo y costos. Se incorporan nuevas tecnologías sin aumentar el presupuesto del pozo (AFE)."),
     ("Tenders and contracts", "Licitaciones y contratos",
-     "Preparing and negotiating tenders and contracts in several countries, so that products and services arrive on time and at the quality the client expects.",
-     "Preparación y negociación de licitaciones y contratos en varios países, para que los productos y servicios lleguen a tiempo y con la calidad que el cliente espera."),
+     "Preparing tenders and negotiating contracts in several countries. Products and services arrive on time, at the quality the client expects.",
+     "Preparación de licitaciones y negociación de contratos en varios países. Los productos y servicios llegan a tiempo, con la calidad que el cliente espera."),
     ("Business and technology assessments", "Evaluaciones de negocio y tecnología",
-     "Reviews of a business line or a technology: how assets are used, where downtime comes from, and how pricing and market position can improve.",
-     "Revisión de una línea de negocio o de una tecnología: cómo se usan los activos, de dónde viene el tiempo no productivo y cómo mejorar los precios y la posición en el mercado."),
+     "Reviews of a business line or a technology: how assets are used, where downtime comes from and how to improve the market position.",
+     "Revisión de una línea de negocio o de una tecnología: cómo se usan los activos, de dónde viene el tiempo no productivo y cómo mejorar la posición en el mercado."),
     ("Operations and profitability", "Operaciones y rentabilidad",
      "Turning operations around through pricing, client growth, cost control and collections. At Wellbore Integrity Solutions in Mexico, revenue grew 70% year over year and profitability 115%.",
      "Recuperación de operaciones mediante precios, crecimiento de clientes, control de costos y cobranza. En Wellbore Integrity Solutions en México, los ingresos crecieron 70% frente al año anterior y la rentabilidad 115%."),
     ("Teams and local talent", "Equipos y talento local",
-     "Training, succession planning and capability building, so that field teams and local technical staff can take the lead.",
-     "Formación, planes de sucesión y desarrollo de capacidades, para que los equipos de campo y el personal técnico local puedan asumir el liderazgo."),
+     "Training, succession planning and capability building, so that local teams can take the lead.",
+     "Formación, planes de sucesión y desarrollo de capacidades, para que los equipos locales puedan asumir el liderazgo."),
 ]
 
 
@@ -535,8 +535,8 @@ def page_services():
 
 %s""" % (
         T("span", "How I can help", "Cómo puedo ayudar", key="services.h1"),
-        T("p", "I work with oil and gas operators and service companies. These are the areas where I can add the most.",
-          "Trabajo con operadoras y empresas de servicios de petróleo y gas. Estas son las áreas donde más puedo aportar.", cls="lede"),
+        T("p", "I work with operators and service companies in the sector. These are the areas where I can add the most.",
+          "Trabajo con operadoras y empresas de servicios del sector. Estas son las áreas donde más puedo aportar.", cls="lede"),
         cover("midday"), "\n".join(rows),
         T("h2", "How I work", "Cómo trabajo", cls="row-title", extra='id="method-title"'),
         T("p", "I work from data and numbers. My method has four steps.",
@@ -544,8 +544,8 @@ def page_services():
         method, closing())
     return shell("services", "services",
                  ("Services | Miguel Lopez", "Servicios | Miguel Lopez"),
-                 ("Drilling and remedial consulting, drilling optimization, tenders and contracts, business assessments and team development for oil and gas companies.",
-                  "Consultoría en perforación y operaciones remediales, optimización de perforación, licitaciones y contratos, evaluaciones de negocio y desarrollo de equipos para empresas de petróleo y gas."),
+                 ("Consulting on drilling, remedial operations, optimization, tenders, contracts, business assessments and team development.",
+                  "Consultoría en perforación, operaciones remediales, optimización, licitaciones, contratos, evaluaciones de negocio y desarrollo de equipos."),
                  main)
 
 
@@ -649,7 +649,7 @@ def page_about():
         ("speech", ("Languages", "Idiomas"),
          ("English and Spanish, fluent. Portuguese, intermediate.", "Inglés y español, con fluidez. Portugués, nivel intermedio.")),
         ("clock", ("Experience", "Experiencia"), ("Since 1987", "Desde 1987")),
-        ("pin", ("Based in", "Con sede en"), ("Bogotá, Colombia", "Bogotá, Colombia")),
+        ("globe", ("Work", "Trabajo"), ("Remote, with clients across Latin America", "Remoto, con clientes en toda Latinoamérica")),
     ]
     fs = []
     for ic, (l_en, l_es), (v_en, v_es) in facts:
@@ -703,22 +703,22 @@ def page_about():
         "badge": pic("assets/about/profile-badge.svg",
                      ("Illustration of a drilling derrick, in place of a portrait", "Ilustración de una torre de perforación, en lugar de un retrato"),
                      640, 640, cls="profile-photo"),
-        "place": T("p", "Senior petroleum engineer, Bogotá, Colombia", "Ingeniero de petróleo senior, Bogotá, Colombia", cls="profile-place"),
-        "lede": T("p", "More than 37 years turning complex operating problems into results that are measurable, safe and profitable for oil and gas companies.",
-                  "Más de 37 años convirtiendo problemas operativos complejos en resultados medibles, seguros y rentables para empresas de petróleo y gas.",
+        "place": T("p", "Senior petroleum engineer, working remotely across Latin America", "Ingeniero de petróleo, trabajando de forma remota en toda Latinoamérica", cls="profile-place"),
+        "lede": T("p", "More than 37 years turning complex operating problems into measurable, safe, profitable results for oil and gas companies.",
+                  "Más de 37 años convirtiendo problemas operativos complejos en resultados medibles, seguros y rentables para las empresas del sector petrolero.",
                   cls="profile-lede"),
         "h_start": T("h2", "Where it started", "Cómo empezó", extra='id="start-title"'),
         "p1": T("p", "My link with the oil industry began long before I stood on a rig. I grew up in Northwestern Venezuela, moving from town to town and city to city because my parents' jobs kept relocating the family.",
                 "Mi vínculo con la industria petrolera comenzó mucho antes de pisar un taladro. Crecí en el noroccidente de Venezuela, mudándome de pueblo en pueblo y de ciudad en ciudad porque los trabajos de mis padres los trasladaban con frecuencia."),
-        "p2": T("p", "On our trips to Zulia State, the heart of Venezuelan oil, I watched pumpjacks nodding and flares burning day and night. That image stayed with me. I studied Petroleum Engineering at Universidad del Zulia (LUZ) and graduated in 1989.",
-                "En nuestros viajes al estado Zulia, el corazón petrolero de Venezuela, veía los balancines subir y bajar y los mechurrios arder de día y de noche. Esa imagen me marcó. Estudié Ingeniería de Petróleo en la Universidad del Zulia (LUZ) y me gradué en 1989."),
+        "p2": T("p", "On our trips to Zulia State, the heart of Venezuelan oil, I watched pumpjacks nodding while flares burned around the clock. That image stayed with me. I studied Petroleum Engineering at Universidad del Zulia (LUZ) and graduated in 1989.",
+                "En nuestros viajes al estado Zulia, el corazón petrolero de Venezuela, veía los balancines subir y bajar mientras los mechurrios ardían sin parar. Esa imagen me marcó. Estudié Ingeniería de Petróleo en la Universidad del Zulia (LUZ) y me gradué en 1989."),
         "p3": T("p", "Growing up on the move gave me adaptability, resilience and an easy way with people from very different backgrounds. It is the base of how I lead in the field: I fit into any operation, learn the local dynamics and build trust from the wellsite crew to senior management.",
                 "Crecer en movimiento me dio adaptabilidad, resiliencia y facilidad para tratar con personas de todo tipo de orígenes. Es la base de mi liderazgo en campo: me integro a cualquier operación, entiendo la dinámica local y construyo confianza desde la cuadrilla en el pozo hasta la alta gerencia."),
         "h_track": T("h2", "Track record", "Trayectoria y resultados", cls="profile-h2--next"),
         "p4": T("p", "I have led operations and projects across Latin America with one standard: comply strictly with what was agreed, then beat the targets. There is little room for error in this industry, so I combine close technical control in the field with a focus on efficiency and profit.",
-                "He dirigido operaciones y proyectos en toda Latinoamérica con un solo estándar: cumplir estrictamente lo acordado y luego superar las metas. En esta industria hay poco margen de error, por eso combino un control técnico cercano en campo con un enfoque en eficiencia y rentabilidad."),
-        "p5": T("p", "As a technical consultant and advisor, I help operators and oilfield service companies with key decisions. My strengths:",
-                "Como consultor y asesor técnico, ayudo a operadoras y empresas de servicios petroleros en decisiones clave. Mis fortalezas:"),
+                "He dirigido operaciones y proyectos en toda Latinoamérica con un solo estándar: cumplir estrictamente lo acordado, luego superar las metas. En esta industria hay poco margen de error, por eso combino un control técnico cercano en campo con un enfoque en eficiencia y rentabilidad."),
+        "p5": T("p", "As a technical consultant, I help operators and service companies with key decisions. My strengths:",
+                "Como consultor técnico, ayudo a operadoras y empresas de servicios petroleros en decisiones clave. Mis fortalezas:"),
         "lis": "\n".join(lis),
         "h_glance": T("h2", "At a glance", "De un vistazo", extra='id="glance-title"'),
         "fs": "\n".join(fs),
@@ -731,8 +731,8 @@ def page_about():
     }
     return shell("about", "about",
                  ("About | Miguel Lopez", "Sobre mí | Miguel Lopez"),
-                 ("About Miguel Lopez: how he came to oil and gas, his track record across Latin America, his languages and where he has worked.",
-                  "Sobre Miguel Lopez: cómo llegó al petróleo y al gas, su trayectoria en Latinoamérica, sus idiomas y dónde ha trabajado."),
+                 ("About Miguel Lopez: how he came to the industry, his track record across Latin America, his languages and where he has worked.",
+                  "Sobre Miguel Lopez: cómo llegó a la industria petrolera, su trayectoria en Latinoamérica, sus idiomas y dónde ha trabajado."),
                  main)
 
 

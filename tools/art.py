@@ -42,6 +42,7 @@ ICONS = {
     "speech": ("#0f766e", "#def2ef"),
     "clock": ("#b45309", "#fdefdb"),
     "pin": ("#c2410c", "#ffe9dc"),
+    "globe": ("#c2410c", "#ffe9dc"),
 }
 
 
@@ -343,6 +344,7 @@ ICON_PATHS = {
     "speech": '<path d="M8 8h32a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H22l-9 8v-8H8a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z" fill="{f}"/><path d="M15 21h.01M24 21h.01M33 21h.01" stroke-width="4"/>',
     "clock": '<circle cx="24" cy="24" r="17" fill="{f}"/><path d="M24 13v11l7 5"/>',
     "pin": '<path d="M24 44s-14-13-14-25a14 14 0 0 1 28 0c0 12-14 25-14 25z" fill="{f}"/><circle cx="24" cy="19" r="5"/>',
+    "globe": '<circle cx="24" cy="24" r="17" fill="{f}"/><path d="M7 24h34M24 7c-9 9-9 25 0 34M24 7c9 9 9 25 0 34"/>',
 }
 
 
