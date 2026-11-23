@@ -23,13 +23,14 @@ js/site.js           language switch, footer year, contact form
 js/i18n.js           the Spanish text (generated)
 tools/build.py       the page generator
 tools/art.py         draws the pictures in assets/ (scenes, icons, map, round badge)
-assets/              the pictures: scenes/, icons/, about/
+tools/art_cards.py   draws the 14 picture cards: one per job and one per service (art.py runs it)
+assets/              the pictures: scenes/, cards/, icons/, about/
 favicon.svg          the small icon in the browser tab
 ```
 
 ## Pictures
 
-Every picture is drawn by `tools/art.py`, so there is no stock photo and no licence to worry about. Run `python3 tools/art.py` to redraw them (the map also needs the free Natural Earth country data, see the top of the file).
+Every picture is drawn by `tools/art.py` (and `tools/art_cards.py` for the job and service cards in `assets/cards/`), so there is no stock photo and no licence to worry about. Run `python3 tools/art.py` to redraw them (the map also needs the free Natural Earth country data, see the top of the file).
 
 To put a real photo in the round picture on the About page, save it as `assets/about/miguel-lopez.jpg` (square, at least 640 x 640 pixels), then in `page_about` in `tools/build.py` change `assets/about/profile-badge.svg` to `assets/about/miguel-lopez.jpg`, write a new description of the photo for the alt text (English and Spanish), and build again.
 
@@ -51,3 +52,5 @@ Every page has `<meta name="robots" content="noindex, nofollow">`, so Google and
 ## Accessibility
 
 The site aims at WCAG 2.2 level AA. It has not been certified or tested with a screen reader. Keep every picture's `alt` text, keep text contrast at 4.5:1 or better (3:1 for large text), keep tap targets at least 24 px high, and check new pages at 320 px wide.
+
+To change the picture of one job or service, edit its function in `tools/art_cards.py` (the list at the bottom says which card belongs to which job or service), run `python3 tools/art.py`, and look at `assets/cards/`. A real photo can replace a card the same way as the round picture: save it in `assets/cards/` and change the path in `page_experience` or `page_services` in `tools/build.py`.

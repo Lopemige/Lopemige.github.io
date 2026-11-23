@@ -335,11 +335,16 @@ a:hover { text-decoration-thickness: 0.16em; }
 .services { margin-top: clamp(2.5rem, 6vw, 4.5rem); }
 .service {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: 0.5rem clamp(1.5rem, 4vw, 4rem);
+  grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+  gap: 1.25rem clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
   padding-block: clamp(1.25rem, 2.6vw, 2rem);
   border-top: 2px solid var(--ink);
 }
+.service:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); }
+.service:nth-child(even) .service-art { order: 2; }
+.service-art { background: var(--artboard); overflow: hidden; }
+.service-art img { display: block; width: 100%; height: auto; }
 .service:last-child { border-bottom: 2px solid var(--ink); }
 .service-title {
   font-size: var(--step-2);
@@ -350,7 +355,9 @@ a:hover { text-decoration-thickness: 0.16em; }
 .service-head { display: flex; align-items: center; gap: 1rem; }
 .service-text { max-width: 38rem; }
 @media (max-width: 760px) {
-  .service { grid-template-columns: 1fr; }
+  .service, .service:nth-child(even) { grid-template-columns: 1fr; }
+  .service:nth-child(even) .service-art { order: 0; }
+  .service-art { max-width: 28rem; }
 }
 
 /* ---------- Career log (Experience) ---------- */
@@ -388,8 +395,24 @@ ol.log {
 .log-roles li { padding-block: 0.1rem; }
 .log-role { font-weight: 600; }
 .log-role-years { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.log-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
+  grid-template-areas: "head art" "main art";
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: start;
+}
+.log-head { grid-area: head; }
+.log-main { grid-area: main; }
+.log-art { grid-area: art; background: #fff; overflow: hidden; }
+.log-art img { display: block; width: 100%; height: auto; }
 .log-body p { max-width: 42rem; }
 .log-body p + p { margin-top: 0.7rem; }
+@media (max-width: 960px) {
+  .log-body { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "art" "main"; grid-template-rows: none; }
+  .log-art { max-width: 24rem; margin-block: 0.9rem 0.6rem; }
+}
 @media (max-width: 700px) {
   .log-item { grid-template-columns: 10px minmax(0, 1fr); column-gap: 1rem; }
   .log-rail { grid-column: 1; grid-row: 1 / span 2; }

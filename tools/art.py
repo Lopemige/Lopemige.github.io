@@ -6,6 +6,7 @@ Draws every picture on the site, so nothing depends on a stock photo or a licenc
 
 It writes:
   assets/scenes/*.svg        oil-field scenes used as the wide picture at the top of each page
+  assets/cards/*.svg         one picture per job and per service (drawn in art_cards.py)
   assets/about/profile-badge.svg   the round picture on the About page (swap it for a photo later)
   assets/about/americas-map.svg    the map of the countries where he has worked (needs the folder above)
   assets/icons/*.svg         the small icons on the tiles
@@ -443,6 +444,9 @@ def main():
     write("assets/scenes/midday-card.svg", scene("midday", 800, 600))
     write("assets/scenes/dusk-card.svg", scene("dusk", 800, 600))
     write("assets/about/profile-badge.svg", badge())
+    from art_cards import CARDS      # the job and service pictures live in their own file
+    for name, fn in CARDS.items():
+        write("assets/cards/%s.svg" % name, fn())
     for name in ICONS:
         write("assets/icons/%s.svg" % name, icon(name))
     geo = sys.argv[1] if len(sys.argv) > 1 else "/home/claude/nvkelso/natural-earth-vector/geojson"

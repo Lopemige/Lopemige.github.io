@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from art import ICONS   # tile colours live next to the drawings
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "20261123d"      # change it whenever css/styles.css or a .js file changes
+VERSION = "20261123e"      # change it whenever css/styles.css or a .js file changes
 YEAR = "2026"
 NAME = "Miguel Lopez"
 ES = {}                    # key -> Spanish text, written to js/i18n.js
@@ -225,8 +225,8 @@ CAREER = [
         "text": [
             ("I managed clients and results in Mexico, with responsibility for the profit and loss account and a team of 105 people. I led the tenders and the operating strategy.",
              "Dirigí los clientes y los resultados en México, con responsabilidad sobre el estado de pérdidas y ganancias y un equipo de 105 personas. Lideré las licitaciones y la estrategia operativa."),
-            ("Revenue grew 70% year over year between 2022 and 2023, and profitability grew 115%. Days sales outstanding fell by 60.",
-             "Los ingresos crecieron 70% interanual entre 2022 y 2023, y la rentabilidad creció 115%. Los días de cobro pendientes bajaron 60."),
+            ("Revenue grew 70% year over year between 2022 and 2023, and profitability grew 115%. Days sales outstanding (DSO) fell by 60 days.",
+             "Entre 2022 y 2023, los ingresos crecieron 70% frente al año anterior y la rentabilidad creció 115%. Los días de ventas por cobrar (DSO) se redujeron en 60 días."),
         ],
     },
     {
@@ -256,7 +256,7 @@ CAREER = [
         "id": "slb", "short": "Schlumberger", "w": 6, "c": 1, "company": "Schlumberger",
         "from": "2010", "to": "2016", "place": None,
         "roles": [
-            (("Drill Bits and Drilling Tools Operation Manager, Brazil", "Gerente de Operaciones de Barrenas y Herramientas de Perforación, Brasil"), ("2015", "2016")),
+            (("Drill Bits and Drilling Tools Operation Manager, Brazil", "Gerente de Operaciones de Brocas y Herramientas de Perforación, Brasil"), ("2015", "2016")),
             (("Sales and Marketing Manager, Drilling Tools and Remedial, South America", "Gerente de Ventas y Mercadeo, Herramientas de Perforación y Remediales, Sudamérica"), ("2013", "2015")),
             (("Manager, Drilling Tools and Remedial, Peru, Colombia and Ecuador", "Gerente de Herramientas de Perforación y Remediales, Perú, Colombia y Ecuador"), ("2010", "2013")),
         ],
@@ -296,7 +296,7 @@ CAREER = [
         "text": [
             ("I managed integrated projects that used new technology for directional wells, such as rotary steerable and vertical drilling systems. In western Venezuela they cut drilling time and reached the geological targets.",
              "Gestioné proyectos integrados con nuevas tecnologías para pozos direccionales, como sistemas rotativos direccionales y de perforación vertical. En el occidente de Venezuela redujeron el tiempo de perforación y alcanzaron los objetivos geológicos."),
-            ("On the OASIS team I analysed drilling performance in Venezuela, Colombia, Argentina, Bolivia, Brazil, Ecuador, Peru and Trinidad and Tobago. The aim was to cut time and cost for clients without raising the well budget (AFE).",
+            ("On the OASIS team I analyzed drilling performance in Venezuela, Colombia, Argentina, Bolivia, Brazil, Ecuador, Peru and Trinidad and Tobago. The aim was to cut time and cost for clients without raising the well budget (AFE).",
              "En el equipo OASIS analicé el desempeño de la perforación en Venezuela, Colombia, Argentina, Bolivia, Brasil, Ecuador, Perú y Trinidad y Tobago. El objetivo era reducir tiempo y costos para los clientes sin aumentar el presupuesto del pozo (AFE)."),
             ("On the Morichal project I managed field and administrative operations for 20 re-entry wells. They reached their geological targets and were drilled in record time.",
              "En el proyecto Morichal gestioné las operaciones de campo y administrativas de 20 pozos de reentrada. Alcanzaron sus objetivos geológicos y se perforaron en tiempo récord."),
@@ -481,10 +481,10 @@ SERVICES = [
      "Preparación y negociación de licitaciones y contratos en varios países, para que los productos y servicios lleguen a tiempo y con la calidad que el cliente espera."),
     ("Business and technology assessments", "Evaluaciones de negocio y tecnología",
      "Reviews of a business line or a technology: how assets are used, where downtime comes from, and how pricing and market position can improve.",
-     "Revisión de una línea de negocio o de una tecnología: cómo se usan los activos, de dónde viene el tiempo perdido y cómo mejorar los precios y la posición en el mercado."),
+     "Revisión de una línea de negocio o de una tecnología: cómo se usan los activos, de dónde viene el tiempo no productivo y cómo mejorar los precios y la posición en el mercado."),
     ("Operations and profitability", "Operaciones y rentabilidad",
      "Turning operations around through pricing, client growth, cost control and collections. At Wellbore Integrity Solutions in Mexico, revenue grew 70% year over year and profitability 115%.",
-     "Recuperación de operaciones mediante precios, crecimiento de clientes, control de costos y cobranza. En Wellbore Integrity Solutions en México, los ingresos crecieron 70% interanual y la rentabilidad 115%."),
+     "Recuperación de operaciones mediante precios, crecimiento de clientes, control de costos y cobranza. En Wellbore Integrity Solutions en México, los ingresos crecieron 70% frente al año anterior y la rentabilidad 115%."),
     ("Teams and local talent", "Equipos y talento local",
      "Training, succession planning and capability building, so that field teams and local technical staff can take the lead.",
      "Formación, planes de sucesión y desarrollo de capacidades, para que los equipos de campo y el personal técnico local puedan asumir el liderazgo."),
@@ -492,20 +492,25 @@ SERVICES = [
 
 
 SERVICE_ICONS = ["derrick", "gauge", "contract", "magnifier", "trend", "sprout"]
+SERVICE_CARDS = ["svc-drilling", "svc-optimize", "svc-tender", "svc-assess", "svc-profit", "svc-team"]
 
 
 def page_services():
     global PAGE
     PAGE = "services"
     rows = []
-    for (t_en, t_es, p_en, p_es), ic in zip(SERVICES, SERVICE_ICONS):
+    for (t_en, t_es, p_en, p_es), ic, card in zip(SERVICES, SERVICE_ICONS, SERVICE_CARDS):
         rows.append("""      <li class="service">
-        <div class="service-head">
-          <span class="icon-box icon-box--big" style="--t: %s">%s</span>
+        <div class="service-art">%s</div>
+        <div class="service-body">
+          <div class="service-head">
+            <span class="icon-box icon-box--big" style="--t: %s">%s</span>
+            %s
+          </div>
           %s
         </div>
-        %s
-      </li>""" % (ICONS[ic][1], icon(ic, 40), T("h2", t_en, t_es, cls="service-title"), T("p", p_en, p_es, cls="service-text")))
+      </li>""" % (pic("assets/cards/%s.svg" % card, None, 800, 600), ICONS[ic][1], icon(ic, 40),
+                  T("h2", t_en, t_es, cls="service-title"), T("p", p_en, p_es, cls="service-text")))
     steps = [("Evaluate progress", "Evaluar el avance"), ("Optimize strategies", "Optimizar las estrategias"),
              ("Make decisions", "Tomar decisiones"), ("Measure performance", "Medir el desempeño")]
     tints = ["#ffe9dc", "#def2ef", "#e0e7fe", "#f9e2ea"]
@@ -574,15 +579,19 @@ def page_experience():
             <span class="icon-box" style="--t: %(tint)s">%(icon)s</span>
             <h2 class="log-company">%(name)s</h2>
           </div>
+          <div class="log-art">%(art)s</div>
+          <div class="log-main">
 %(place)s
           <ul class="log-roles">
 %(roles)s
           </ul>
 %(paras)s
+          </div>
         </div>
       </li>""" % {"c": e["c"], "id": e["id"], "yrs": T("span", yrs[0], yrs[1]), "name": name,
                    "tint": ICONS[LOG_ICONS[e["id"]]][1], "icon": icon(LOG_ICONS[e["id"]], 32),
-                   "place": place, "roles": "\n".join(roles), "paras": paras})
+                   "place": place, "roles": "\n".join(roles), "paras": paras,
+                   "art": pic("assets/cards/job-%s.svg" % e["id"], None, 800, 600)})
     main = """    <div class="exp-top">
       <div class="exp-text">
         <h1 class="hero-title">%s</h1>
