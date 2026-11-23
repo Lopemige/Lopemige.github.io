@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title data-i18n="contact.title">Contact | Miguel Lopez</title>
+  <meta name="description" content="Send Miguel Lopez a message about a drilling, remedial, tender or contract project." data-i18n-attr="content:contact.desc">
+  <meta name="theme-color" content="#d9dadd">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Contact | Miguel Lopez" data-i18n-attr="content:contact.ogtitle">
+  <meta property="og:description" content="Send Miguel Lopez a message about a drilling, remedial, tender or contract project." data-i18n-attr="content:contact.desc">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+  <link rel="stylesheet" href="css/styles.css?v=20261123a">
+</head>
+<body id="top" data-page="contact">
+  <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <img src="favicon.svg" alt="" width="22" height="22">
+        <span>Miguel Lopez</span>
+      </a>
+      <nav class="site-nav" aria-label="Main" data-i18n-attr="aria-label:nav.label">
+        <ul class="nav-list">
+          <li><a href="services.html" data-i18n="nav.services">Services</a></li>
+          <li><a href="experience.html" data-i18n="nav.experience">Experience</a></li>
+          <li><a href="about.html" data-i18n="nav.about">About</a></li>
+          <li><a class="nav-cta" href="contact.html" aria-current="page" data-i18n="nav.contact">Contact</a></li>
+          <li><button class="lang-btn" id="lang-toggle" type="button" lang="es">Español</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page wrap">
+    <h1 class="hero-title"><span data-i18n="contact.h1">Contact</span></h1>
+
+    <div class="contact-grid">
+      <div class="contact-intro">
+        <p class="lede" data-i18n="contact.1">Have a project in mind? Send me a message and I will reply by email.</p>
+      </div>
+
+      <!--
+        This form sends messages through Web3Forms, which forwards them to the inbox that the access
+        key was created for. No email address is written on this page. The access key is public by
+        design: it only lets people send messages to that inbox. To get a key, open web3forms.com,
+        enter the inbox address, and paste the key into the access_key field below.
+      -->
+      <form class="form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+        <input type="hidden" name="subject" value="New message from your website">
+        <input type="hidden" name="from_name" value="Website">
+        <input type="checkbox" name="botcheck" style="display: none;" tabindex="-1" autocomplete="off">
+
+        <div class="field">
+          <label for="name" data-i18n="contact.name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required>
+        </div>
+
+        <div class="field">
+          <label for="email" data-i18n="contact.email">Your email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-note">
+          <p class="field-note" id="email-note" data-i18n="contact.note">Only used to reply to you.</p>
+        </div>
+
+        <div class="field">
+          <label for="message" data-i18n="contact.message">Your message</label>
+          <textarea id="message" name="message" rows="6" required></textarea>
+        </div>
+
+        <button class="btn" type="submit" data-i18n="contact.send">Send message</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; <span data-year>2026</span> Miguel Lopez</p>
+      <ul class="footer-links">
+        <li><a href="contact.html" data-i18n="foot.contact">Contact</a></li>
+      </ul>
+      <a href="#top" data-i18n="foot.top">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js?v=20261123a"></script>
+  <script src="js/site.js?v=20261123a"></script>
+</body>
+</html>
